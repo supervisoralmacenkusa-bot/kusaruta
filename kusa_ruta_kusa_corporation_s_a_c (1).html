@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#0B192C">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="KUSA Ruta">
+    <title>KUSA Ruta • KUSA CORPORATION S.A.C.</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Iconos Phosphor -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        kusa: {
+                            dark: '#0B192C',
+                            navy: '#102542',
+                            blue: '#1E3A8A',
+                            accent: '#2563EB',
+                            amber: '#F59E0B',
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 25px -5px rgba(11, 25, 44, 0.08), 0 4px 10px -6px rgba(11, 25, 44, 0.05)',
+                        'fab': '0 12px 28px -4px rgba(245, 158, 11, 0.45), 0 4px 10px -2px rgba(11, 25, 44, 0.25)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            background-color: #E2E8F0;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .tap-scale {
+            transition: transform 0.14s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.15s ease;
+        }
+        .tap-scale:active {
+            transform: scale(0.96);
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: translateY(16px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .animate-modal-in {
+            animation: modalIn 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .safe-top {
+            padding-top: max(14px, env(safe-area-inset-top));
+        }
+        .safe-bottom-fab {
+            bottom: max(20px, calc(16px + env(safe-area-inset-bottom)));
+        }
+        .safe-bottom-pad {
+            padding-bottom: max(96px, calc(84px + env(safe-area-inset-bottom)));
+        }
+    </style>
+</head>
+<body class="text-slate-900 font-sans antialiased selection:bg-amber-200">
+
+    <!-- Contenedor Adaptable (100% fluido en móvil, centrado elegante en pantallas grandes) -->
+    <div id="app" class="w-full max-w-lg mx-auto min-h-[100dvh] bg-[#F8FAFC] shadow-2xl relative flex flex-col sm:border-x sm:border-slate-300/80">
+        
+        <!-- ================================================================= -->
+        <!-- CABECERA CORPORATIVA PREMIUM (KUSA CORPORATION S.A.C.)            -->
+        <!-- ================================================================= -->
+        <header class="sticky top-0 z-30 bg-gradient-to-br from-[#0B192C] via-[#112647] to-[#1E3A8A] text-white px-4 safe-top pb-4 shadow-lg border-b border-white/10">
+            <div class="flex items-center justify-between gap-2 mb-3.5">
+                <!-- Identidad KUSA -->
+                <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-500 p-[1.5px] shadow-md shrink-0">
+                        <div class="w-full h-full rounded-[14px] bg-[#0B192C] flex flex-col items-center justify-center">
+                            <span class="font-display font-extrabold text-base text-white tracking-tight leading-none">KUSA</span>
+                            <span class="w-5 h-[3px] rounded-full bg-amber-400 mt-1"></span>
+                        </div>
+                    </div>
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-1.5">
+                            <h1 class="font-display text-lg sm:text-xl font-extrabold tracking-tight text-white truncate">KUSA Ruta</h1>
+                            <span id="header-total-badge" class="bg-white/15 text-amber-300 border border-white/15 text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0">
+                                4 puntos
+                            </span>
+                        </div>
+                        <p class="text-[10px] sm:text-[11px] font-semibold text-blue-200/90 tracking-wide truncate">
+                            KUSA CORPORATION S.A.C.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Acciones Rápidas: Instalar y Equipo -->
+                <div class="flex items-center gap-1.5 shrink-0">
+                    <button onclick="openInstallModal()" class="tap-scale bg-white/10 hover:bg-white/20 active:bg-white/25 text-white border border-white/15 px-2.5 py-2 rounded-xl text-[11px] font-bold flex items-center gap-1.5 backdrop-blur-sm" title="Instalar en celular">
+                        <i class="ph-bold ph-device-mobile-camera text-amber-400 text-sm"></i>
+                        <span class="hidden xs:inline sm:inline">App</span>
+                    </button>
+                    <button onclick="openSyncModal()" class="tap-scale bg-amber-500 hover:bg-amber-400 text-[#0B192C] px-3 py-2 rounded-xl text-[11px] font-extrabold flex items-center gap-1.5 shadow-sm" title="Compartir base con compañeros">
+                        <i class="ph-bold ph-users-three text-sm"></i>
+                        <span>Equipo</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Barra de Búsqueda Limpia y de Alto Contraste -->
+            <div id="search-wrapper" class="relative">
+                <i class="ph-bold ph-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg pointer-events-none"></i>
+                <input 
+                    type="search" 
+                    id="search-input" 
+                    placeholder="Buscar cliente, agencia, calle o referencia..." 
+                    class="w-full bg-white text-slate-900 placeholder-slate-400 text-sm font-medium rounded-2xl pl-10 pr-10 py-3 shadow-inner focus:outline-none focus:ring-2 focus:ring-amber-400 transition"
+                >
+                <button id="clear-search" onclick="clearSearch()" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 p-1.5">
+                    <i class="ph-fill ph-x-circle text-lg"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- ================================================================= -->
+        <!-- VISTA 1: DIRECTORIO VISUAL DE PUNTOS Y AGENCIAS                   -->
+        <!-- ================================================================= -->
+        <main id="view-directory" class="flex-1 flex flex-col">
+            
+            <!-- Pills de Filtro Horizontales con Scroll Suave -->
+            <div class="sticky top-[118px] sm:top-[122px] z-20 bg-[#F8FAFC]/95 backdrop-blur-md px-4 py-3 border-b border-slate-200/80">
+                <div class="flex items-center gap-2 overflow-x-auto no-scrollbar" id="filter-chips">
+                    <button onclick="setFilter('todos')" data-filter="todos" class="filter-chip tap-scale shrink-0 px-3.5 py-2 rounded-full text-xs font-extrabold bg-[#0B192C] text-white shadow-sm">
+                        Todos (<span id="count-todos">0</span>)
+                    </button>
+                    <button onclick="setFilter('agencia')" data-filter="agencia" class="filter-chip tap-scale shrink-0 px-3.5 py-2 rounded-full text-xs font-bold bg-white text-slate-700 border border-slate-200/90 flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                        Agencias (<span id="count-agencia">0</span>)
+                    </button>
+                    <button onclick="setFilter('antiguo')" data-filter="antiguo" class="filter-chip tap-scale shrink-0 px-3.5 py-2 rounded-full text-xs font-bold bg-white text-slate-700 border border-slate-200/90 flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+                        Clientes Frecuentes (<span id="count-antiguo">0</span>)
+                    </button>
+                    <button onclick="setFilter('nuevo')" data-filter="nuevo" class="filter-chip tap-scale shrink-0 px-3.5 py-2 rounded-full text-xs font-bold bg-white text-slate-700 border border-slate-200/90 flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                        Clientes Nuevos (<span id="count-nuevo">0</span>)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Grid / Lista de Tarjetas Visuales -->
+            <div id="places-grid" class="p-4 space-y-4 safe-bottom-pad">
+                <!-- Renderizado dinámico -->
+            </div>
+
+            <!-- Estado Vacío -->
+            <div id="empty-state" class="hidden flex-1 flex flex-col items-center justify-center px-6 py-16 text-center safe-bottom-pad">
+                <div class="w-16 h-16 rounded-3xl bg-blue-50 text-[#1E3A8A] flex items-center justify-center mb-3 border border-blue-100">
+                    <i class="ph-duotone ph-camera text-3xl"></i>
+                </div>
+                <h3 class="font-display text-base font-extrabold text-slate-800">Sin resultados encontrados</h3>
+                <p class="text-xs text-slate-500 mt-1 max-w-xs leading-relaxed">
+                    No hay locales que coincidan con tu búsqueda. Puedes registrar este destino tomando una foto ahora.
+                </p>
+                <button onclick="openFormView(null, true)" class="mt-5 tap-scale bg-[#1E3A8A] text-white text-xs font-extrabold px-5 py-3.5 rounded-2xl shadow-lg inline-flex items-center gap-2">
+                    <i class="ph-bold ph-camera text-base text-amber-400"></i>
+                    <span>TOMAR FOTO / NUEVO</span>
+                </button>
+            </div>
+        </main>
+
+        <!-- ================================================================= -->
+        <!-- VISTA 2: FORMULARIO CREAR / EDITAR CON CÁMARA EN VIVO             -->
+        <!-- ================================================================= -->
+        <section id="view-form" class="hidden flex-1 p-4 pb-10 animate-modal-in">
+            <div class="bg-white rounded-[22px] p-4 sm:p-5 shadow-soft border border-slate-200/80">
+                
+                <!-- Encabezado del Formulario -->
+                <div class="flex items-center justify-between gap-2 pb-3.5 mb-4 border-b border-slate-100">
+                    <div>
+                        <span class="text-[10px] font-extrabold uppercase tracking-wider text-blue-700">KUSA CORPORATION S.A.C.</span>
+                        <h2 id="form-heading" class="font-display text-lg font-extrabold text-[#0B192C]">Nuevo Punto de Reparto</h2>
+                    </div>
+                    <button type="button" onclick="closeFormView()" class="tap-scale bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3.5 py-2.5 rounded-xl flex items-center gap-1">
+                        <i class="ph-bold ph-x"></i> Cancelar
+                    </button>
+                </div>
+
+                <form id="place-form" onsubmit="handleSavePlace(event)" class="space-y-4">
+                    <input type="hidden" id="edit-id" value="">
+
+                    <!-- 1. ÁREA INTERACTIVA DE CÁMARA Y FOTO DE FACHADA -->
+                    <div class="bg-slate-50 p-3.5 rounded-[20px] border border-slate-200">
+                        <div class="flex items-center justify-between mb-2.5">
+                            <label class="text-xs font-extrabold uppercase tracking-wider text-[#0B192C] flex items-center gap-1.5">
+                                <i class="ph-fill ph-camera text-blue-700 text-base"></i>
+                                <span>Foto de la Fachada *</span>
+                            </label>
+                            <span id="photo-badge" class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800">
+                                Obligatoria
+                            </span>
+                        </div>
+
+                        <!-- A) VISOR DE CÁMARA EN VIVO (getUserMedia) -->
+                        <div id="live-camera-container" class="hidden relative w-full h-64 sm:h-72 bg-black rounded-2xl overflow-hidden mb-3 shadow-inner border-2 border-blue-600">
+                            <video id="camera-video" autoplay playsinline muted class="w-full h-full object-cover"></video>
+                            
+                            <!-- Marco guía para encuadrar fachada/letrero -->
+                            <div class="absolute inset-4 border-2 border-dashed border-white/55 rounded-xl pointer-events-none flex flex-col justify-between p-2.5">
+                                <div class="flex justify-between items-center">
+                                    <span class="bg-black/65 backdrop-blur-sm text-white text-[10px] font-bold px-2.5 py-1 rounded-full">
+                                        Encuadra fachada o portón
+                                    </span>
+                                    <button type="button" onclick="switchCameraFacing()" class="pointer-events-auto tap-scale w-9 h-9 rounded-full bg-black/65 backdrop-blur-sm text-white flex items-center justify-center border border-white/25" title="Cambiar cámara frontal/trasera">
+                                        <i class="ph-bold ph-camera-rotate text-lg"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Barra inferior de obturador táctil grande -->
+                            <div class="absolute bottom-3 inset-x-0 flex items-center justify-center gap-5">
+                                <button type="button" onclick="stopLiveCamera()" class="tap-scale bg-slate-900/85 text-white text-xs font-bold px-3.5 py-2.5 rounded-full border border-white/20">
+                                    Cerrar
+                                </button>
+                                <button type="button" onclick="captureLiveFrame()" class="tap-scale w-16 h-16 rounded-full bg-white p-1 shadow-xl border-2 border-amber-400 flex items-center justify-center" title="Capturar Foto">
+                                    <span class="w-full h-full rounded-full bg-[#1E3A8A] flex items-center justify-center text-white">
+                                        <i class="ph-fill ph-camera text-2xl"></i>
+                                    </span>
+                                </button>
+                                <div class="w-14"></div>
+                            </div>
+                        </div>
+
+                        <!-- B) PREVISUALIZACIÓN DE FOTO CAPTURADA / EXISTENTE -->
+                        <div id="preview-container" class="relative w-full h-48 sm:h-52 rounded-2xl border-2 border-dashed border-slate-300 bg-white flex flex-col items-center justify-center overflow-hidden mb-3">
+                            <img id="photo-preview" src="" alt="Vista previa fachada" class="hidden w-full h-full object-cover">
+                            
+                            <div id="photo-empty-hint" class="text-center px-4">
+                                <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center mx-auto mb-2">
+                                    <i class="ph-duotone ph-storefront text-2xl"></i>
+                                </div>
+                                <p class="text-xs font-extrabold text-slate-700">Sin fotografía aún</p>
+                                <p class="text-[11px] text-slate-500 mt-0.5">Toma una foto del frente del local o agencia</p>
+                            </div>
+
+                            <!-- Botón flotante para volver a tomar foto -->
+                            <button type="button" id="btn-retake" onclick="startCameraFlow()" class="hidden tap-scale absolute bottom-2.5 right-2.5 bg-[#0B192C]/90 backdrop-blur-sm text-white text-xs font-bold px-3 py-2 rounded-xl flex items-center gap-1.5 shadow-lg border border-white/15">
+                                <i class="ph-bold ph-arrows-clockwise text-amber-400"></i> Tomar otra
+                            </button>
+                        </div>
+
+                        <!-- C) BOTONES DE CAPTURA Y GALERÍA -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            <button type="button" onclick="startCameraFlow()" class="tap-scale w-full bg-gradient-to-r from-[#0B192C] to-[#1E3A8A] hover:opacity-95 text-white font-extrabold text-xs py-3.5 px-4 rounded-xl shadow-md flex items-center justify-center gap-2">
+                                <span class="text-base">📸</span>
+                                <span>TOMAR FOTO CON CÁMARA</span>
+                            </button>
+                            <button type="button" onclick="document.getElementById('gallery-file-input').click()" class="tap-scale w-full bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 font-bold text-xs py-3.5 px-4 rounded-xl flex items-center justify-center gap-2">
+                                <span class="text-base">🖼️</span>
+                                <span>Subir de Galería</span>
+                            </button>
+                        </div>
+
+                        <!-- Inputs de respaldo nativo -->
+                        <input type="file" id="native-camera-input" accept="image/*" capture="environment" class="hidden" onchange="handleImageFileSelect(event)">
+                        <input type="file" id="gallery-file-input" accept="image/*" class="hidden" onchange="handleImageFileSelect(event)">
+                    </div>
+
+                    <!-- 2. CATEGORÍA DEL PUNTO -->
+                    <div>
+                        <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-600 mb-2">
+                            Categoría *
+                        </label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="place-type" value="agencia" class="peer sr-only" checked>
+                                <div class="tap-scale text-center py-2.5 px-1.5 rounded-2xl border-2 border-slate-200 peer-checked:border-amber-500 peer-checked:bg-amber-50/80 peer-checked:text-amber-950 text-slate-600 text-[11px] font-extrabold transition">
+                                    <i class="ph-fill ph-package block text-xl mb-1 mx-auto text-amber-500"></i>
+                                    Agencia
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="place-type" value="antiguo" class="peer sr-only">
+                                <div class="tap-scale text-center py-2.5 px-1.5 rounded-2xl border-2 border-slate-200 peer-checked:border-blue-600 peer-checked:bg-blue-50/80 peer-checked:text-blue-950 text-slate-600 text-[11px] font-extrabold transition">
+                                    <i class="ph-fill ph-storefront block text-xl mb-1 mx-auto text-blue-600"></i>
+                                    C. Frecuente
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="place-type" value="nuevo" class="peer sr-only">
+                                <div class="tap-scale text-center py-2.5 px-1.5 rounded-2xl border-2 border-slate-200 peer-checked:border-emerald-600 peer-checked:bg-emerald-50/80 peer-checked:text-emerald-950 text-slate-600 text-[11px] font-extrabold transition">
+                                    <i class="ph-fill ph-sparkle block text-xl mb-1 mx-auto text-emerald-600"></i>
+                                    C. Nuevo
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 3. NOMBRE DEL CLIENTE O AGENCIA -->
+                    <div>
+                        <label for="input-name" class="block text-xs font-extrabold uppercase tracking-wider text-slate-600 mb-1.5">
+                            Nombre del Cliente o Agencia *
+                        </label>
+                        <input type="text" id="input-name" required placeholder="Ej. Agencia Shalom - La Victoria" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm font-semibold text-slate-900 focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 focus:outline-none">
+                    </div>
+
+                    <!-- 4. DISTRITO Y TELÉFONO -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label for="input-district" class="block text-xs font-extrabold uppercase tracking-wider text-slate-600 mb-1.5">
+                                Distrito / Zona *
+                            </label>
+                            <input type="text" id="input-district" required list="lima-districts" placeholder="Ej. La Victoria, Ate..." class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm font-semibold text-slate-900 focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 focus:outline-none">
+                            <datalist id="lima-districts">
+                                <option value="La Victoria">
+                                <option value="Cercado de Lima">
+                                <option value="Ate">
+                                <option value="Los Olivos">
+                                <option value="San Juan de Lurigancho">
+                                <option value="Santa Anita">
+                                <option value="San Martín de Porres">
+                                <option value="Callao">
+                                <option value="Villa El Salvador">
+                                <option value="Surquillo">
+                            </datalist>
+                        </div>
+                        <div>
+                            <label for="input-phone" class="block text-xs font-extrabold uppercase tracking-wider text-slate-600 mb-1.5">
+                                Teléfono / WhatsApp
+                            </label>
+                            <input type="tel" id="input-phone" placeholder="Ej. 987 654 321" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm font-semibold text-slate-900 focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 focus:outline-none">
+                        </div>
+                    </div>
+
+                    <!-- 5. DIRECCIÓN EXACTA -->
+                    <div>
+                        <label for="input-address" class="block text-xs font-extrabold uppercase tracking-wider text-slate-600 mb-1.5">
+                            Dirección Exacta *
+                        </label>
+                        <input type="text" id="input-address" required placeholder="Ej. Jr. Luna Pizarro 1140" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm font-semibold text-slate-900 focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 focus:outline-none">
+                    </div>
+
+                    <!-- 6. REFERENCIA VISUAL DE LA FACHADA -->
+                    <div>
+                        <label for="input-reference" class="block text-xs font-extrabold uppercase tracking-wider text-slate-600 mb-1.5">
+                            Referencia Visual de la Fachada *
+                        </label>
+                        <input type="text" id="input-reference" required placeholder="Ej. Portón rojo metálico al costado de farmacia" class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-3 text-sm font-semibold text-slate-900 focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 focus:outline-none">
+                    </div>
+
+                    <!-- 7. NOTAS DE RECEPCIÓN / HORARIO -->
+                    <div>
+                        <label for="input-notes" class="block text-xs font-extrabold uppercase tracking-wider text-slate-600 mb-1.5">
+                            Horario y Notas de Entrega
+                        </label>
+                        <textarea id="input-notes" rows="2" placeholder="Ej. Reciben hasta las 5:30 pm, pedir sello en guía KUSA." class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm font-medium text-slate-900 focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 focus:outline-none"></textarea>
+                    </div>
+
+                    <!-- BOTÓN GUARDAR -->
+                    <button type="submit" class="tap-scale w-full bg-gradient-to-r from-[#0B192C] to-[#1E3A8A] text-white font-display font-extrabold text-sm py-4 rounded-2xl shadow-lg border-b-4 border-amber-500 flex items-center justify-center gap-2 mt-2">
+                        <i class="ph-bold ph-check-circle text-xl text-amber-400"></i>
+                        <span id="form-submit-label">GUARDAR PUNTO EN KUSA RUTA</span>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- ================================================================= -->
+        <!-- BOTÓN FLOTANTE ERGONÓMICO (+ TOMAR FOTO / NUEVO)                  -->
+        <!-- ================================================================= -->
+        <button id="fab-new-point" onclick="openFormView(null, true)" class="tap-scale fixed safe-bottom-fab right-4 sm:right-[calc(50%-236px)] z-30 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-[#0B192C] font-display font-extrabold text-xs sm:text-sm px-4 sm:px-5 py-3.5 rounded-full shadow-fab border-2 border-[#0B192C] flex items-center gap-2">
+            <i class="ph-fill ph-camera text-xl"></i>
+            <span>+ TOMAR FOTO / NUEVO</span>
+        </button>
+
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- MODAL DETALLE DE FICHA (CONSULTA RÁPIDA, EDITAR Y ELIMINAR)           -->
+    <!-- ===================================================================== -->
+    <div id="detail-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-white w-full max-w-lg rounded-t-[28px] sm:rounded-[28px] max-h-[94dvh] flex flex-col overflow-hidden shadow-2xl animate-modal-in">
+            
+            <!-- Foto Panorámica de Fachada -->
+            <div class="relative h-60 sm:h-68 bg-slate-900 shrink-0">
+                <img id="modal-img" src="" alt="Fachada" class="w-full h-full object-cover cursor-zoom-in" onclick="openZoomModal()">
+                
+                <div class="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-black/75 to-transparent pointer-events-none"></div>
+                <div class="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/90 via-black/45 to-transparent pointer-events-none"></div>
+
+                <!-- Botones Superiores -->
+                <div class="absolute top-3.5 inset-x-3.5 flex items-center justify-between">
+                    <button onclick="closeDetailModal()" class="tap-scale w-10 h-10 rounded-full bg-black/60 backdrop-blur-md text-white flex items-center justify-center border border-white/20" title="Volver">
+                        <i class="ph-bold ph-arrow-left text-xl"></i>
+                    </button>
+                    <button onclick="openZoomModal()" class="tap-scale px-3.5 h-10 rounded-full bg-amber-400 text-[#0B192C] text-xs font-extrabold flex items-center gap-1.5 shadow-lg">
+                        <i class="ph-bold ph-magnifying-glass-plus text-base"></i> Ampliar Foto
+                    </button>
+                </div>
+
+                <!-- Título y Categoría -->
+                <div class="absolute bottom-3.5 inset-x-4 text-white">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span id="modal-badge" class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider">
+                            Agencia
+                        </span>
+                        <span id="modal-district" class="text-xs font-bold text-slate-200 flex items-center gap-1">
+                            <i class="ph-fill ph-map-pin text-amber-400"></i> La Victoria
+                        </span>
+                    </div>
+                    <h2 id="modal-title" class="font-display text-lg sm:text-xl font-extrabold leading-tight drop-shadow">Nombre del Local</h2>
+                </div>
+            </div>
+
+            <!-- Contenido de la Ficha -->
+            <div class="p-4 sm:p-5 overflow-y-auto space-y-3.5 flex-1">
+                
+                <!-- Dirección Exacta -->
+                <div class="bg-slate-50 rounded-2xl p-3.5 border border-slate-200/90">
+                    <div class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-0.5 flex items-center gap-1">
+                        <i class="ph-fill ph-map-pin-line text-blue-700"></i> Dirección Exacta
+                    </div>
+                    <p id="modal-address" class="text-sm font-extrabold text-slate-900">Dirección</p>
+                </div>
+
+                <!-- Referencia Visual Resaltada -->
+                <div class="bg-blue-50/90 rounded-2xl p-3.5 border border-blue-200">
+                    <div class="text-[10px] font-extrabold uppercase tracking-wider text-blue-700 mb-0.5 flex items-center gap-1">
+                        <i class="ph-fill ph-eye text-blue-700"></i> Referencia Visual de la Fachada
+                    </div>
+                    <p id="modal-reference" class="text-sm font-extrabold text-blue-950 leading-snug">Referencia</p>
+                </div>
+
+                <!-- Navegación GPS: Google Maps y Waze -->
+                <div class="grid grid-cols-2 gap-2.5">
+                    <a id="btn-google-maps" href="#" target="_blank" rel="noopener noreferrer" class="tap-scale bg-[#1E3A8A] hover:bg-blue-800 text-white py-3 px-3 rounded-2xl font-extrabold text-xs flex items-center justify-center gap-2 shadow-sm">
+                        <i class="ph-fill ph-google-logo text-base"></i> Google Maps
+                    </a>
+                    <a id="btn-waze" href="#" target="_blank" rel="noopener noreferrer" class="tap-scale bg-sky-500 hover:bg-sky-600 text-white py-3 px-3 rounded-2xl font-extrabold text-xs flex items-center justify-center gap-2 shadow-sm">
+                        <i class="ph-fill ph-navigation-arrow text-base"></i> Abrir Waze
+                    </a>
+                </div>
+
+                <!-- Contacto Directo (Llamar / WhatsApp) -->
+                <div id="modal-phone-box" class="bg-slate-50 rounded-2xl p-3 border border-slate-200 flex items-center justify-between gap-2">
+                    <div class="min-w-0">
+                        <div class="text-[10px] font-extrabold uppercase text-slate-400">Teléfono de Contacto</div>
+                        <div id="modal-phone" class="text-sm font-extrabold text-slate-900 truncate">987 654 321</div>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <a id="btn-call" href="tel:" class="tap-scale bg-slate-800 text-white text-xs font-extrabold px-3 py-2.5 rounded-xl flex items-center gap-1">
+                            <i class="ph-fill ph-phone"></i> Llamar
+                        </a>
+                        <a id="btn-whatsapp" href="#" target="_blank" rel="noopener noreferrer" class="tap-scale bg-emerald-600 text-white text-xs font-extrabold px-3 py-2.5 rounded-xl flex items-center gap-1">
+                            <i class="ph-fill ph-whatsapp-logo text-base"></i> WhatsApp
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Horario / Notas -->
+                <div id="modal-notes-box" class="bg-amber-50/90 rounded-2xl p-3.5 border border-amber-200">
+                    <div class="text-[10px] font-extrabold uppercase tracking-wider text-amber-800 mb-0.5 flex items-center gap-1">
+                        <i class="ph-fill ph-clock text-amber-600"></i> Horario y Notas de Entrega
+                    </div>
+                    <p id="modal-notes" class="text-xs font-bold text-amber-950 leading-relaxed">Notas</p>
+                </div>
+
+                <!-- Compartir Ficha por WhatsApp -->
+                <button onclick="shareCurrentPlace()" class="tap-scale w-full bg-[#0B192C] hover:bg-slate-800 text-white font-extrabold text-xs py-3.5 px-4 rounded-2xl flex items-center justify-center gap-2 shadow-sm">
+                    <i class="ph-bold ph-share-network text-base text-amber-400"></i>
+                    <span>Compartir Ficha con Compañero</span>
+                </button>
+
+                <!-- Botones Claros y Accesibles: EDITAR y ELIMINAR -->
+                <div class="grid grid-cols-2 gap-2.5 pt-2 border-t border-slate-100">
+                    <button onclick="editSelectedPlace()" class="tap-scale bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 font-extrabold text-xs py-3 rounded-2xl flex items-center justify-center gap-1.5">
+                        <i class="ph-bold ph-pencil-simple text-base"></i>
+                        <span>Editar Punto</span>
+                    </button>
+                    <button onclick="promptDeletePlace(selectedPlaceId)" class="tap-scale bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 font-extrabold text-xs py-3 rounded-2xl flex items-center justify-center gap-1.5">
+                        <i class="ph-bold ph-trash text-base"></i>
+                        <span>Eliminar</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- MODAL DE CONFIRMACIÓN ELEGANTE PARA ELIMINAR                          -->
+    <!-- ===================================================================== -->
+    <div id="delete-confirm-modal" class="hidden fixed inset-0 z-[60] bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-[24px] p-5 shadow-2xl animate-modal-in text-center">
+            <div class="w-14 h-14 rounded-2xl bg-red-100 text-red-600 flex items-center justify-center mx-auto mb-3">
+                <i class="ph-duotone ph-trash text-3xl"></i>
+            </div>
+            <h3 class="font-display text-base font-extrabold text-slate-900">¿Eliminar este punto de reparto?</h3>
+            <p id="delete-target-name" class="text-xs font-bold text-slate-600 mt-1">Nombre del local</p>
+            <p class="text-[11px] text-slate-400 mt-1">Esta acción quitará la foto y los datos de tu celular.</p>
+            
+            <div class="grid grid-cols-2 gap-2.5 mt-5">
+                <button onclick="closeDeleteConfirmModal()" class="tap-scale bg-slate-100 hover:bg-slate-200 text-slate-800 font-extrabold text-xs py-3.5 rounded-xl">
+                    Cancelar
+                </button>
+                <button onclick="confirmDeletePlace()" class="tap-scale bg-red-600 hover:bg-red-700 text-white font-extrabold text-xs py-3.5 rounded-xl shadow-md">
+                    Sí, Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- VISOR PANTALLA COMPLETA CON ZOOM 2X                                   -->
+    <!-- ===================================================================== -->
+    <div id="zoom-modal" class="hidden fixed inset-0 z-[70] bg-black flex flex-col justify-between p-4">
+        <div class="flex items-center justify-between text-white pt-2 z-10">
+            <span id="zoom-caption" class="text-xs font-extrabold bg-white/15 px-3 py-1.5 rounded-full backdrop-blur-md truncate max-w-[62%]">Fachada</span>
+            <div class="flex items-center gap-2 shrink-0">
+                <button onclick="togglePhotoZoom()" class="tap-scale px-3 h-10 rounded-full bg-amber-400 text-[#0B192C] text-xs font-extrabold flex items-center gap-1">
+                    <i class="ph-bold ph-magnifying-glass-plus"></i> <span id="zoom-toggle-text">Zoom 2x</span>
+                </button>
+                <button onclick="closeZoomModal()" class="tap-scale w-10 h-10 rounded-full bg-white/20 text-white flex items-center justify-center">
+                    <i class="ph-bold ph-x text-xl"></i>
+                </button>
+            </div>
+        </div>
+        <div class="flex-1 flex items-center justify-center overflow-auto my-2" onclick="closeZoomModal()">
+            <img id="zoom-img" src="" alt="Vista ampliada" onclick="event.stopPropagation(); togglePhotoZoom()" class="max-w-full max-h-full object-contain rounded-xl transition-transform duration-200 cursor-zoom-in">
+        </div>
+        <p class="text-center text-white/70 text-xs pb-2">Toca la imagen para acercar o fuera para cerrar</p>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- MODAL COMPARTIR CON COMPAÑEROS (EXPORTAR / IMPORTAR .JSON)            -->
+    <!-- ===================================================================== -->
+    <div id="sync-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-white w-full max-w-md rounded-t-[28px] sm:rounded-[28px] p-5 shadow-2xl animate-modal-in">
+            <div class="flex items-center justify-between mb-3 pb-3 border-b border-slate-100">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-11 h-11 rounded-2xl bg-[#1E3A8A] text-white flex items-center justify-center shadow-sm">
+                        <i class="ph-fill ph-users-three text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-display text-base font-extrabold text-[#0B192C]">Equipo KUSA Ruta</h3>
+                        <p class="text-[11px] font-semibold text-slate-500">Comparte fotos y rutas con tus compañeros</p>
+                    </div>
+                </div>
+                <button onclick="closeSyncModal()" class="tap-scale w-9 h-9 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center">
+                    <i class="ph-bold ph-x"></i>
+                </button>
+            </div>
+
+            <div class="space-y-3 mt-3">
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3.5">
+                    <h4 class="text-xs font-extrabold text-[#0B192C] uppercase tracking-wide mb-1">1. Exportar Base (.json)</h4>
+                    <p class="text-xs text-slate-600 mb-3">Descarga un archivo con tus puntos y fotos para enviarlo por WhatsApp a otro repartidor de <strong>KUSA CORPORATION S.A.C.</strong></p>
+                    <button onclick="exportDataJSON()" class="tap-scale w-full bg-[#1E3A8A] hover:bg-blue-800 text-white font-extrabold text-xs py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-sm">
+                        <i class="ph-bold ph-export text-base"></i> Descargar Archivo de Rutas (.json)
+                    </button>
+                </div>
+
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3.5">
+                    <h4 class="text-xs font-extrabold text-[#0B192C] uppercase tracking-wide mb-1">2. Importar Rutas de Compañero</h4>
+                    <p class="text-xs text-slate-600 mb-3">Selecciona el archivo <code>.json</code> recibido para agregar sus clientes y agencias a tu teléfono.</p>
+                    <button onclick="document.getElementById('import-json-input').click()" class="tap-scale w-full bg-[#0B192C] hover:bg-slate-800 text-white font-extrabold text-xs py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-sm">
+                        <i class="ph-bold ph-download-simple text-base text-amber-400"></i> Cargar Archivo (.json)
+                    </button>
+                    <input type="file" id="import-json-input" accept=".json,application/json" class="hidden" onchange="importDataJSON(event)">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- MODAL GUÍA RÁPIDA DE INSTALACIÓN EN CELULAR                           -->
+    <!-- ===================================================================== -->
+    <div id="install-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-white w-full max-w-md rounded-t-[28px] sm:rounded-[28px] p-5 shadow-2xl animate-modal-in max-h-[90dvh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-3 pb-3 border-b border-slate-100">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-11 h-11 rounded-2xl bg-[#0B192C] text-amber-400 flex items-center justify-center shadow-sm">
+                        <i class="ph-fill ph-device-mobile-camera text-2xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-display text-base font-extrabold text-[#0B192C]">Instalar KUSA Ruta</h3>
+                        <p class="text-[11px] font-semibold text-slate-500">Acceso directo en tu pantalla de inicio</p>
+                    </div>
+                </div>
+                <button onclick="closeInstallModal()" class="tap-scale w-9 h-9 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center">
+                    <i class="ph-bold ph-x"></i>
+                </button>
+            </div>
+
+            <div class="bg-blue-50/90 border border-blue-200 rounded-2xl p-3.5 mb-3">
+                <div class="flex items-center gap-2 text-[#1E3A8A] font-extrabold text-xs uppercase mb-2">
+                    <i class="ph-fill ph-android-logo text-lg"></i> Android (Google Chrome)
+                </div>
+                <ol class="text-xs text-slate-800 space-y-1.5 font-semibold list-decimal pl-4">
+                    <li>Abre <strong>KUSA Ruta</strong> en Chrome.</li>
+                    <li>Toca el menú <strong>(⋮)</strong> arriba a la derecha.</li>
+                    <li>Pulsa <strong>"Instalar aplicación"</strong> o <strong>"Agregar a pantalla principal"</strong>.</li>
+                </ol>
+            </div>
+
+            <div class="bg-slate-100 border border-slate-200 rounded-2xl p-3.5 mb-4">
+                <div class="flex items-center gap-2 text-slate-900 font-extrabold text-xs uppercase mb-2">
+                    <i class="ph-fill ph-apple-logo text-lg"></i> iPhone (Safari)
+                </div>
+                <ol class="text-xs text-slate-800 space-y-1.5 font-semibold list-decimal pl-4">
+                    <li>Abre el enlace en <strong>Safari</strong>.</li>
+                    <li>Toca <strong>Compartir</strong> (cuadro con flecha hacia arriba).</li>
+                    <li>Selecciona <strong>"Agregar a inicio"</strong>.</li>
+                </ol>
+            </div>
+
+            <button onclick="closeInstallModal()" class="tap-scale w-full bg-[#0B192C] text-white font-extrabold text-xs py-3.5 rounded-xl">
+                Listo, entendido
+            </button>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- NOTIFICACIÓN TOAST FLOTANTE                                           -->
+    <!-- ===================================================================== -->
+    <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-[80] pointer-events-none opacity-0 transition-all duration-300 transform -translate-y-2 w-[90%] max-w-sm">
+        <div class="bg-[#0B192C] text-white text-xs font-extrabold px-4 py-3 rounded-2xl shadow-2xl border border-amber-400/60 flex items-center justify-center gap-2 text-center">
+            <i id="toast-icon" class="ph-fill ph-check-circle text-amber-400 text-lg shrink-0"></i>
+            <span id="toast-msg">Guardado correctamente</span>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- LÓGICA DE LA APLICACIÓN                                               -->
+    <!-- ===================================================================== -->
+    <script>
+        const STORAGE_KEY = 'kusa_ruta_corporativo_v2';
+
+        let places = [];
+        let currentFilter = 'todos';
+        let searchQuery = '';
+        let selectedPlaceId = null;
+        let pendingDeleteId = null;
+        let currentPhotoData = '';
+        let liveStream = null;
+        let currentFacingMode = 'environment';
+        let isZoomed = false;
+
+        // Generador de ilustraciones SVG realistas de fachadas en Lima para ejemplos iniciales
+        function buildFacadeIllustration(title, subtitle, wallColor, doorColor, bannerColor, tagText) {
+            const svg = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520">
+                <defs>
+                    <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#bae6fd"/>
+                        <stop offset="100%" stop-color="#e0f2fe"/>
+                    </linearGradient>
+                </defs>
+                <rect width="900" height="405" fill="url(#skyGrad)"/>
+                <!-- Fachada Edificio -->
+                <rect x="85" y="65" width="730" height="340" rx="10" fill="${wallColor}" stroke="#0B192C" stroke-width="5"/>
+                <rect x="70" y="46" width="760" height="26" rx="5" fill="#0B192C"/>
+                <!-- Letrero Principal -->
+                <rect x="145" y="92" width="610" height="78" rx="12" fill="${bannerColor}" stroke="#ffffff" stroke-width="3"/>
+                <text x="450" y="133" font-family="Arial, sans-serif" font-size="29" font-weight="900" fill="#ffffff" text-anchor="middle">${title}</text>
+                <text x="450" y="158" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#f8fafc" text-anchor="middle">${subtitle}</text>
+                <!-- Portón Metálico -->
+                <rect x="165" y="198" width="265" height="207" rx="4" fill="${doorColor}" stroke="#0B192C" stroke-width="4"/>
+                <line x1="165" y1="238" x2="430" y2="238" stroke="#0B192C" stroke-width="3"/>
+                <line x1="165" y1="278" x2="430" y2="278" stroke="#0B192C" stroke-width="3"/>
+                <line x1="165" y1="318" x2="430" y2="318" stroke="#0B192C" stroke-width="3"/>
+                <line x1="165" y1="358" x2="430" y2="358" stroke="#0B192C" stroke-width="3"/>
+                <!-- Ventanilla / Acceso -->
+                <rect x="485" y="212" width="245" height="122" rx="10" fill="#0B192C" stroke="#ffffff" stroke-width="4"/>
+                <rect x="497" y="224" width="221" height="98" rx="6" fill="#38bdf8" opacity="0.3"/>
+                <text x="607" y="279" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#ffffff" text-anchor="middle">${tagText}</text>
+                <!-- Vereda y Pista -->
+                <rect x="0" y="405" width="900" height="36" fill="#cbd5e1"/>
+                <rect x="0" y="441" width="900" height="79" fill="#334155"/>
+                <line x1="50" y1="480" x2="200" y2="480" stroke="#F59E0B" stroke-width="7" stroke-dasharray="36,24"/>
+                <line x1="320" y1="480" x2="570" y2="480" stroke="#F59E0B" stroke-width="7" stroke-dasharray="36,24"/>
+                <line x1="690" y1="480" x2="860" y2="480" stroke="#F59E0B" stroke-width="7" stroke-dasharray="36,24"/>
+            </svg>`;
+            return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg.trim());
+        }
+
+        // Ejemplos iniciales realistas en Lima para KUSA CORPORATION S.A.C.
+        const INITIAL_PLACES = [
+            {
+                id: 'kusa-init-1',
+                name: 'Agencia Shalom - Terminal La Victoria',
+                type: 'agencia',
+                district: 'La Victoria',
+                address: 'Jr. Luna Pizarro 1140',
+                reference: 'Portón rojo metálico al costado de farmacia, letrero rojo grande',
+                phone: '987 654 321',
+                notes: 'Reciben carga hasta las 6:00 pm. Ingresar por puerta lateral izquierda y pedir sello en guía KUSA.',
+                photo: buildFacadeIllustration('SHALOM CARGO', 'TERMINAL LUNA PIZARRO - LA VICTORIA', '#f8fafc', '#dc2626', '#b91c1c', 'RECEPCIÓN CARGA'),
+                createdAt: Date.now() - 400000
+            },
+            {
+                id: 'kusa-init-2',
+                name: 'Agencia Marvisur - Terminal Ate',
+                type: 'agencia',
+                district: 'Ate',
+                address: 'Av. Nicolás Ayllón 3420',
+                reference: 'Portón azul de doble hoja frente a grifo Primax, reja negra',
+                phone: '945 112 890',
+                notes: 'Atención de 8:00 am a 5:30 pm. Llevar guía de remisión remitente de KUSA CORPORATION S.A.C.',
+                photo: buildFacadeIllustration('EXPRESO MARVISUR', 'TERMINAL CARRETERA CENTRAL - ATE', '#eff6ff', '#1E3A8A', '#172554', 'VENTANILLA 2'),
+                createdAt: Date.now() - 300000
+            },
+            {
+                id: 'kusa-init-3',
+                name: 'Comercial El Sol - Galería Gamarra',
+                type: 'antiguo',
+                district: 'La Victoria',
+                address: 'Jr. Agustín Gamarra 845 (Puerta 3)',
+                reference: 'Fachada amarilla de 3 pisos con toldo azul, ingreso por reja lateral',
+                phone: '991 340 778',
+                notes: 'Cliente frecuente. Preguntar por Sr. Ricardo en el almacén del 1er piso para firma de cargo.',
+                photo: buildFacadeIllustration('COMERCIAL EL SOL', 'GALERÍA GAMARRA - LA VICTORIA', '#fefce8', '#334155', '#d97706', 'ALMACÉN P1'),
+                createdAt: Date.now() - 200000
+            },
+            {
+                id: 'kusa-init-4',
+                name: 'Distribuidora Norte - Los Olivos',
+                type: 'nuevo',
+                district: 'Los Olivos',
+                address: 'Av. Alfredo Mendiola 3890',
+                reference: 'Local verde agua con portón plomo enrollable, al lado de ferretería',
+                phone: '962 809 415',
+                notes: 'Cliente nuevo. Reciben mercadería hasta las 5:00 pm. Confirmar recepción con Sra. Elena.',
+                photo: buildFacadeIllustration('DISTRIBUIDORA NORTE', 'PANAMERICANA NORTE - LOS OLIVOS', '#ecfdf5', '#475569', '#059669', 'DESCARGA'),
+                createdAt: Date.now() - 100000
+            }
+        ];
+
+        // Inicializar aplicación
+        window.onload = function() {
+            loadPlaces();
+            setupSearch();
+            renderPlaces();
+        };
+
+        function loadPlaces() {
+            try {
+                const stored = localStorage.getItem(STORAGE_KEY);
+                if (stored) {
+                    places = JSON.parse(stored);
+                } else {
+                    places = [...INITIAL_PLACES];
+                    savePlaces();
+                }
+            } catch (e) {
+                console.error('Error cargando almacenamiento:', e);
+                places = [...INITIAL_PLACES];
+            }
+        }
+
+        function savePlaces() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(places));
+                updateCounters();
+                return true;
+            } catch (e) {
+                showToast('Memoria llena. Exporta y libera espacio.', 'error');
+                return false;
+            }
+        }
+
+        function setupSearch() {
+            const input = document.getElementById('search-input');
+            const clearBtn = document.getElementById('clear-search');
+            input.addEventListener('input', (e) => {
+                searchQuery = e.target.value.trim().toLowerCase();
+                clearBtn.classList.toggle('hidden', searchQuery === '');
+                renderPlaces();
+            });
+        }
+
+        function clearSearch() {
+            const input = document.getElementById('search-input');
+            input.value = '';
+            searchQuery = '';
+            document.getElementById('clear-search').classList.add('hidden');
+            renderPlaces();
+            input.focus();
+        }
+
+        function setFilter(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                const active = chip.dataset.filter === filter;
+                chip.className = active
+                    ? 'filter-chip tap-scale shrink-0 px-3.5 py-2 rounded-full text-xs font-extrabold bg-[#0B192C] text-white shadow-sm'
+                    : 'filter-chip tap-scale shrink-0 px-3.5 py-2 rounded-full text-xs font-bold bg-white text-slate-700 border border-slate-200/90 flex items-center gap-1.5';
+            });
+            renderPlaces();
+        }
+
+        function updateCounters() {
+            const total = places.length;
+            document.getElementById('header-total-badge').textContent = `${total} ${total === 1 ? 'punto' : 'puntos'}`;
+            document.getElementById('count-todos').textContent = total;
+            document.getElementById('count-agencia').textContent = places.filter(p => p.type === 'agencia').length;
+            document.getElementById('count-antiguo').textContent = places.filter(p => p.type === 'antiguo').length;
+            document.getElementById('count-nuevo').textContent = places.filter(p => p.type === 'nuevo').length;
+        }
+
+        function getCategoryBadge(type) {
+            if (type === 'agencia') {
+                return {
+                    label: 'Agencia',
+                    classes: 'bg-gradient-to-r from-amber-400 to-amber-500 text-[#0B192C]'
+                };
+            }
+            if (type === 'nuevo') {
+                return {
+                    label: 'Cliente Nuevo',
+                    classes: 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white'
+                };
+            }
+            return {
+                label: 'Cliente Frecuente',
+                classes: 'bg-gradient-to-r from-blue-600 to-blue-700 text-white'
+            };
+        }
+
+        // Renderizar tarjetas modernas y adaptables
+        function renderPlaces() {
+            updateCounters();
+            const grid = document.getElementById('places-grid');
+            const emptyState = document.getElementById('empty-state');
+
+            const filtered = places.filter(p => {
+                if (currentFilter !== 'todos' && p.type !== currentFilter) return false;
+                if (searchQuery) {
+                    const text = `${p.name} ${p.district} ${p.address} ${p.reference || ''} ${p.notes || ''}`.toLowerCase();
+                    return text.includes(searchQuery);
+                }
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            grid.innerHTML = filtered.map(place => {
+                const badge = getCategoryBadge(place.type);
+                return `
+                <article onclick="openDetailModal('${place.id}')" class="tap-scale bg-white rounded-[20px] overflow-hidden shadow-soft border border-slate-200/90 hover:border-blue-400 transition cursor-pointer flex flex-col">
+                    <!-- Imagen Panorámica de Fachada -->
+                    <div class="relative h-44 sm:h-48 bg-slate-900 overflow-hidden">
+                        <img src="${place.photo}" alt="${escapeHtml(place.name)}" loading="lazy" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-black/20"></div>
+                        
+                        <!-- Insignia de Categoría -->
+                        <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider shadow ${badge.classes}">
+                            ${badge.label}
+                        </span>
+
+                        <!-- Botones Rápidos Editar / Eliminar en Tarjeta -->
+                        <div class="absolute top-2.5 right-2.5 flex items-center gap-1.5">
+                            <button onclick="event.stopPropagation(); openFormView('${place.id}', false)" class="tap-scale w-9 h-9 rounded-full bg-black/55 backdrop-blur-md text-white hover:bg-blue-600 flex items-center justify-center border border-white/20" title="Editar">
+                                <i class="ph-bold ph-pencil-simple text-base"></i>
+                            </button>
+                            <button onclick="event.stopPropagation(); promptDeletePlace('${place.id}')" class="tap-scale w-9 h-9 rounded-full bg-black/55 backdrop-blur-md text-white hover:bg-red-600 flex items-center justify-center border border-white/20" title="Eliminar">
+                                <i class="ph-bold ph-trash text-base"></i>
+                            </button>
+                        </div>
+
+                        <!-- Distrito y Acceso Directo -->
+                        <div class="absolute bottom-3 inset-x-3.5 flex items-center justify-between text-white">
+                            <span class="text-xs font-extrabold flex items-center gap-1 drop-shadow">
+                                <i class="ph-fill ph-map-pin text-amber-400"></i> ${escapeHtml(place.district)}
+                            </span>
+                            <span class="text-[10px] font-extrabold bg-white/20 backdrop-blur-md border border-white/25 text-white px-2.5 py-1 rounded-full">
+                                Ver Ficha →
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Información Principal de Alto Contraste -->
+                    <div class="p-3.5 sm:p-4">
+                        <h3 class="font-display text-base font-extrabold text-[#0B192C] leading-snug line-clamp-1">
+                            ${escapeHtml(place.name)}
+                        </h3>
+                        <p class="text-xs font-bold text-slate-700 mt-1 flex items-center gap-1.5 line-clamp-1">
+                            <i class="ph-fill ph-map-pin-line text-blue-700 shrink-0"></i>
+                            <span>${escapeHtml(place.address)}</span>
+                        </p>
+                        <div class="mt-2.5 bg-blue-50/80 border border-blue-100 rounded-xl px-2.5 py-2 flex items-start gap-1.5">
+                            <i class="ph-fill ph-eye text-blue-700 shrink-0 mt-0.5 text-sm"></i>
+                            <p class="text-xs font-semibold text-blue-950 line-clamp-2 leading-snug">
+                                ${escapeHtml(place.reference || 'Sin referencia visual')}
+                            </p>
+                        </div>
+                    </div>
+                </article>
+                `;
+            }).join('');
+        }
+
+        // =====================================================================
+        // GESTIÓN DEL FORMULARIO (CREAR Y EDITAR)
+        // =====================================================================
+        function openFormView(editId = null, autoStartCamera = false) {
+            resetFormFields();
+
+            const dirView = document.getElementById('view-directory');
+            const formView = document.getElementById('view-form');
+            const searchWrapper = document.getElementById('search-wrapper');
+            const fab = document.getElementById('fab-new-point');
+
+            dirView.classList.add('hidden');
+            searchWrapper.classList.add('hidden');
+            fab.classList.add('hidden');
+            formView.classList.remove('hidden');
+
+            if (editId) {
+                const place = places.find(p => p.id === editId);
+                if (place) {
+                    document.getElementById('edit-id').value = place.id;
+                    document.getElementById('form-heading').textContent = 'Editar Punto de Reparto';
+                    document.getElementById('form-submit-label').textContent = 'GUARDAR CAMBIOS';
+
+                    document.getElementById('input-name').value = place.name;
+                    document.querySelector(`input[name="place-type"][value="${place.type}"]`).checked = true;
+                    document.getElementById('input-district').value = place.district;
+                    document.getElementById('input-phone').value = place.phone || '';
+                    document.getElementById('input-address').value = place.address;
+                    document.getElementById('input-reference').value = place.reference || '';
+                    document.getElementById('input-notes').value = place.notes || '';
+
+                    currentPhotoData = place.photo;
+                    displayPhotoPreview(place.photo);
+                }
+            } else if (autoStartCamera) {
+                startCameraFlow();
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function closeFormView() {
+            stopLiveCamera();
+            resetFormFields();
+
+            document.getElementById('view-form').classList.add('hidden');
+            document.getElementById('view-directory').classList.remove('hidden');
+            document.getElementById('search-wrapper').classList.remove('hidden');
+            document.getElementById('fab-new-point').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetFormFields() {
+            document.getElementById('place-form').reset();
+            document.getElementById('edit-id').value = '';
+            document.getElementById('form-heading').textContent = 'Nuevo Punto de Reparto';
+            document.getElementById('form-submit-label').textContent = 'GUARDAR PUNTO EN KUSA RUTA';
+
+            currentPhotoData = '';
+            document.getElementById('photo-preview').classList.add('hidden');
+            document.getElementById('photo-empty-hint').classList.remove('hidden');
+            document.getElementById('btn-retake').classList.add('hidden');
+
+            const badge = document.getElementById('photo-badge');
+            badge.textContent = 'Obligatoria';
+            badge.className = 'text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800';
+        }
+
+        // =====================================================================
+        // CÁMARA EN VIVO (getUserMedia + CAMBIO FRONTAL/TRASERA) Y COMPRESIÓN
+        // =====================================================================
+        async function startCameraFlow() {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                try {
+                    stopLiveCamera();
+                    const stream = await navigator.mediaDevices.getUserMedia({
+                        video: { facingMode: { ideal: currentFacingMode } },
+                        audio: false
+                    });
+                    liveStream = stream;
+                    const video = document.getElementById('camera-video');
+                    video.srcObject = stream;
+
+                    document.getElementById('live-camera-container').classList.remove('hidden');
+                    document.getElementById('preview-container').classList.add('hidden');
+                    return;
+                } catch (err) {
+                    console.info('Activando cámara nativa del dispositivo:', err.message);
+                }
+            }
+            document.getElementById('native-camera-input').click();
+        }
+
+        function switchCameraFacing() {
+            currentFacingMode = currentFacingMode === 'environment' ? 'user' : 'environment';
+            startCameraFlow();
+        }
+
+        function stopLiveCamera() {
+            if (liveStream) {
+                liveStream.getTracks().forEach(t => t.stop());
+                liveStream = null;
+            }
+            document.getElementById('live-camera-container').classList.add('hidden');
+            document.getElementById('preview-container').classList.remove('hidden');
+        }
+
+        function captureLiveFrame() {
+            const video = document.getElementById('camera-video');
+            if (!video || !video.videoWidth) return;
+
+            const MAX_W = 900;
+            let w = video.videoWidth;
+            let h = video.videoHeight;
+            if (w > MAX_W) {
+                h = Math.round((h * MAX_W) / w);
+                w = MAX_W;
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = w;
+            canvas.height = h;
+            canvas.getContext('2d').drawImage(video, 0, 0, w, h);
+
+            currentPhotoData = canvas.toDataURL('image/jpeg', 0.78);
+            stopLiveCamera();
+            displayPhotoPreview(currentPhotoData);
+            showToast('📸 Foto capturada y optimizada');
+        }
+
+        function handleImageFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const MAX_W = 900;
+                    let w = img.width;
+                    let h = img.height;
+                    if (w > MAX_W) {
+                        h = Math.round((h * MAX_W) / w);
+                        w = MAX_W;
+                    }
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = w;
+                    canvas.height = h;
+                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+
+                    currentPhotoData = canvas.toDataURL('image/jpeg', 0.78);
+                    displayPhotoPreview(currentPhotoData);
+                    showToast('Foto cargada y optimizada');
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+            event.target.value = '';
+        }
+
+        function displayPhotoPreview(src) {
+            const img = document.getElementById('photo-preview');
+            const hint = document.getElementById('photo-empty-hint');
+            const retake = document.getElementById('btn-retake');
+            const badge = document.getElementById('photo-badge');
+
+            img.src = src;
+            img.classList.remove('hidden');
+            hint.classList.add('hidden');
+            retake.classList.remove('hidden');
+
+            badge.textContent = '✓ Lista';
+            badge.className = 'text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800';
+        }
+
+        function handleSavePlace(event) {
+            event.preventDefault();
+
+            const editId = document.getElementById('edit-id').value;
+            const name = document.getElementById('input-name').value.trim();
+            const type = document.querySelector('input[name="place-type"]:checked').value;
+            const district = document.getElementById('input-district').value.trim();
+            const phone = document.getElementById('input-phone').value.trim();
+            const address = document.getElementById('input-address').value.trim();
+            const reference = document.getElementById('input-reference').value.trim();
+            const notes = document.getElementById('input-notes').value.trim();
+
+            if (!currentPhotoData) {
+                showToast('⚠️ Toma o sube una foto de la fachada primero', 'error');
+                document.getElementById('preview-container').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+
+            if (editId) {
+                const index = places.findIndex(p => p.id === editId);
+                if (index !== -1) {
+                    places[index] = {
+                        ...places[index],
+                        name, type, district, phone, address, reference, notes,
+                        photo: currentPhotoData
+                    };
+                }
+            } else {
+                places.unshift({
+                    id: 'kusa-' + Date.now(),
+                    name,
+                    type,
+                    district,
+                    phone,
+                    address,
+                    reference,
+                    notes,
+                    photo: currentPhotoData,
+                    createdAt: Date.now()
+                });
+            }
+
+            if (savePlaces()) {
+                showToast(editId ? '✅ Punto actualizado correctamente' : '✅ Nuevo punto guardado en KUSA Ruta');
+                closeFormView();
+                renderPlaces();
+            }
+        }
+
+        // =====================================================================
+        // CONSULTA DE DETALLE, EDICIÓN Y ELIMINACIÓN SEGURA
+        // =====================================================================
+        function openDetailModal(id) {
+            const place = places.find(p => p.id === id);
+            if (!place) return;
+
+            selectedPlaceId = id;
+            const badge = getCategoryBadge(place.type);
+
+            document.getElementById('modal-img').src = place.photo;
+            document.getElementById('modal-title').textContent = place.name;
+            document.getElementById('modal-district').innerHTML = `<i class="ph-fill ph-map-pin text-amber-400"></i> ${escapeHtml(place.district)}`;
+
+            const modalBadge = document.getElementById('modal-badge');
+            modalBadge.textContent = badge.label;
+            modalBadge.className = `px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${badge.classes}`;
+
+            document.getElementById('modal-address').textContent = place.address;
+            document.getElementById('modal-reference').textContent = place.reference || 'Sin referencia visual';
+
+            const mapsQuery = encodeURIComponent(`${place.address}, ${place.district}, Lima, Peru`);
+            document.getElementById('btn-google-maps').href = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
+            document.getElementById('btn-waze').href = `https://waze.com/ul?q=${mapsQuery}&navigate=yes`;
+
+            const phoneBox = document.getElementById('modal-phone-box');
+            if (place.phone) {
+                phoneBox.classList.remove('hidden');
+                document.getElementById('modal-phone').textContent = place.phone;
+                const digits = place.phone.replace(/\D/g, '');
+                const waNumber = digits.length === 9 ? '51' + digits : digits;
+                document.getElementById('btn-call').href = `tel:${digits}`;
+                document.getElementById('btn-whatsapp').href = `https://wa.me/${waNumber}?text=${encodeURIComponent('Hola, le escribimos de KUSA CORPORATION S.A.C. por su entrega.')}`;
+            } else {
+                phoneBox.classList.add('hidden');
+            }
+
+            const notesBox = document.getElementById('modal-notes-box');
+            if (place.notes) {
+                notesBox.classList.remove('hidden');
+                document.getElementById('modal-notes').textContent = place.notes;
+            } else {
+                notesBox.classList.add('hidden');
+            }
+
+            document.getElementById('detail-modal').classList.remove('hidden');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detail-modal').classList.add('hidden');
+            selectedPlaceId = null;
+        }
+
+        function editSelectedPlace() {
+            const idToEdit = selectedPlaceId;
+            closeDetailModal();
+            if (idToEdit) openFormView(idToEdit, false);
+        }
+
+        function promptDeletePlace(id) {
+            const place = places.find(p => p.id === id);
+            if (!place) return;
+            pendingDeleteId = id;
+            document.getElementById('delete-target-name').textContent = `"${place.name}"`;
+            document.getElementById('delete-confirm-modal').classList.remove('hidden');
+        }
+
+        function closeDeleteConfirmModal() {
+            document.getElementById('delete-confirm-modal').classList.add('hidden');
+            pendingDeleteId = null;
+        }
+
+        function confirmDeletePlace() {
+            if (!pendingDeleteId) return;
+            places = places.filter(p => p.id !== pendingDeleteId);
+            savePlaces();
+
+            if (selectedPlaceId === pendingDeleteId) {
+                closeDetailModal();
+            }
+            closeDeleteConfirmModal();
+            renderPlaces();
+            showToast('Punto eliminado');
+        }
+
+        // =====================================================================
+        // ZOOM DE FOTO A PANTALLA COMPLETA
+        // =====================================================================
+        function openZoomModal() {
+            const place = places.find(p => p.id === selectedPlaceId);
+            if (!place) return;
+            isZoomed = false;
+            const img = document.getElementById('zoom-img');
+            img.src = place.photo;
+            img.style.transform = 'scale(1)';
+            document.getElementById('zoom-toggle-text').textContent = 'Zoom 2x';
+            document.getElementById('zoom-caption').textContent = `${place.name} • ${place.district}`;
+            document.getElementById('zoom-modal').classList.remove('hidden');
+        }
+
+        function togglePhotoZoom() {
+            const img = document.getElementById('zoom-img');
+            isZoomed = !isZoomed;
+            img.style.transform = isZoomed ? 'scale(1.9)' : 'scale(1)';
+            img.style.cursor = isZoomed ? 'zoom-out' : 'zoom-in';
+            document.getElementById('zoom-toggle-text').textContent = isZoomed ? 'Normal' : 'Zoom 2x';
+        }
+
+        function closeZoomModal() {
+            document.getElementById('zoom-modal').classList.add('hidden');
+        }
+
+        // =====================================================================
+        // COMPARTIR CON EQUIPO KUSA CORPORATION S.A.C.
+        // =====================================================================
+        function shareCurrentPlace() {
+            const place = places.find(p => p.id === selectedPlaceId);
+            if (!place) return;
+
+            const mapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.address + ', ' + place.district + ', Lima')}`;
+            const text = `🚚 *KUSA RUTA - KUSA CORPORATION S.A.C.*\n` +
+                         `🏢 *${place.name}* (${place.district})\n` +
+                         `📍 *Dirección:* ${place.address}\n` +
+                         `👁️ *Fachada:* ${place.reference || ''}\n` +
+                         (place.notes ? `⏰ *Nota:* ${place.notes}\n` : '') +
+                         (place.phone ? `📞 *Tel:* ${place.phone}\n` : '') +
+                         `🗺️ *Maps:* ${mapsLink}`;
+
+            if (navigator.share) {
+                navigator.share({ title: `KUSA Ruta: ${place.name}`, text })
+                    .catch(() => fallbackCopyText(text));
+            } else {
+                fallbackCopyText(text);
+            }
+        }
+
+        function fallbackCopyText(text) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+                document.execCommand('copy');
+                showToast('¡Ficha copiada! Pégala en WhatsApp');
+            } catch (e) {
+                showToast('No se pudo copiar el texto', 'error');
+            }
+            document.body.removeChild(ta);
+        }
+
+        function openSyncModal() {
+            document.getElementById('sync-modal').classList.remove('hidden');
+        }
+
+        function closeSyncModal() {
+            document.getElementById('sync-modal').classList.add('hidden');
+        }
+
+        function openInstallModal() {
+            document.getElementById('install-modal').classList.remove('hidden');
+        }
+
+        function closeInstallModal() {
+            document.getElementById('install-modal').classList.add('hidden');
+        }
+
+        function exportDataJSON() {
+            const blob = new Blob([JSON.stringify(places, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const date = new Date().toISOString().slice(0, 10);
+            a.href = url;
+            a.download = `KUSA_Ruta_${date}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('Archivo .json descargado para compartir');
+        }
+
+        function importDataJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (!Array.isArray(data)) throw new Error('Formato inválido');
+
+                    let added = 0;
+                    const existingIds = new Set(places.map(p => p.id));
+                    data.forEach(item => {
+                        if (item.name && item.address && !existingIds.has(item.id)) {
+                            places.unshift(item);
+                            added++;
+                        }
+                    });
+
+                    savePlaces();
+                    renderPlaces();
+                    closeSyncModal();
+                    showToast(`✅ Se importaron ${added} puntos nuevos`);
+                } catch (err) {
+                    showToast('El archivo seleccionado no es válido', 'error');
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        let toastTimeout = null;
+        function showToast(msg, type = 'success') {
+            const toast = document.getElementById('toast');
+            const icon = document.getElementById('toast-icon');
+            document.getElementById('toast-msg').textContent = msg;
+
+            icon.className = type === 'error'
+                ? 'ph-fill ph-warning-circle text-red-400 text-lg shrink-0'
+                : 'ph-fill ph-check-circle text-amber-400 text-lg shrink-0';
+
+            toast.classList.remove('opacity-0', '-translate-y-2');
+            toast.classList.add('opacity-100', 'translate-y-0');
+
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', '-translate-y-2');
+            }, 2600);
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+        }
+    </script>
+</body>
+</html>
